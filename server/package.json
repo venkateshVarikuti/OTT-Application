@@ -6,6 +6,7 @@
   "dependencies": {
     "accepts": "^1.3.8",
     "array-flatten": "^1.1.1",
+    "bcrypt": "^5.1.1",
     "body-parser": "^1.20.1",
     "buffer-equal-constant-time": "^1.0.1",
     "bytes": "^3.1.2",
@@ -14,6 +15,7 @@
     "content-type": "^1.0.5",
     "cookie": "^0.5.0",
     "cookie-signature": "^1.0.6",
+    "cors": "^2.8.5",
     "debug": "^2.6.9",
     "depd": "^2.0.0",
     "destroy": "^1.2.0",
@@ -55,6 +57,7 @@
     "mime-types": "^2.1.35",
     "ms": "^2.0.0",
     "negotiator": "^0.6.3",
+    "nodemailer": "^6.9.5",
     "object-inspect": "^1.12.3",
     "on-finished": "^2.4.1",
     "on-headers": "^1.0.2",
@@ -75,6 +78,7 @@
     "serve-static": "^1.15.0",
     "setprototypeof": "^1.2.0",
     "side-channel": "^1.0.4",
+    "speakeasy": "^2.0.0",
     "statuses": "^2.0.1",
     "toidentifier": "^1.0.1",
     "ts-node-dev": "^2.0.0",
@@ -86,9 +90,19 @@
     "yallist": "^4.0.0"
   },
   "scripts": {
-    "start-local": "ts-node-dev src/apis/index.ts",
+    "start-server": "ts-node-dev src/apis/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/dotenv": "^8.2.0",
+    "@types/express": "^4.17.18",
+    "@types/express-session": "^1.17.8",
+    "@types/nodemailer": "^6.4.11",
+    "@types/passport": "^1.0.13",
+    "@types/speakeasy": "^2.0.8",
+    "dotenv": "^16.3.1"
+  }
 }
