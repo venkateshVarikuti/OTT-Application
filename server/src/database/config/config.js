@@ -8,7 +8,7 @@ module.exports = {
   database: process.env.DB_NAME || 'database-1' ,
   host: process.env.DB_HOST || 'database-1.cluster-cjjvydwcuexr.eu-north-1.rds.amazonaws.com' ,
   port: process.env.DB_PORT || 5432,
-  
+
   dialect: process.env.DB_DIALECT || "postgres",
 
   pool: {
