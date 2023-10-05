@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "sequelize": "^6.33.0"
+  },
+  "scripts": {
+    "start-server": "src/apis/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
