@@ -6,7 +6,7 @@ const path = require("path");
 const cors= require('cors');
 dotenv.config({ path: path.join(__dirname, "../../../.env") });
 
-
+console.log("weelf");
 
 const app= express();
 app.use(cors());
