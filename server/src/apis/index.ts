@@ -4,6 +4,7 @@ const  dotenv = require("dotenv") ;
 import { AuthRouter } from "./src/routes/aut.route";
 import mongoose, { ConnectOptions } from "mongoose";
 const session = require("express-session")
+import { VideoRouter } from "./src/routes/video.route";
 
 const path = require("path");
 const cors= require('cors');
@@ -14,6 +15,8 @@ const sessionMiddleware = session({
   saveUninitialized: false
 });
 
+require('./src/common/config/passport')
+
 const init = async () => {
     const app= express();
     app.use(cors());
@@ -21,7 +24,8 @@ const init = async () => {
     app.use(passport.initialize());
     app.use(express.urlencoded({ extended: true }));
     app.use(
-        AuthRouter
+        AuthRouter,
+        VideoRouter
     )
     app.use(sessionMiddleware);
 

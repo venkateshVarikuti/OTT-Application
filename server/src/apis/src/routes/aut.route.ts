@@ -10,8 +10,8 @@ const router= express.Router();
 router.post("/api/v1/register",async (req : express.Request,res : express.Response)=>{
 
     try{
-        const user=AuthController.register(req,res);
-        return res.status(200).json({})
+        const user= await AuthController.register(req,res);
+        return res.status(200).json({user})
     }catch(err :any){
         return res.status(500).json({
             error: err.message
@@ -33,7 +33,9 @@ router.post("/api/v1/login",async (req : any, res : any)=>{
 router.post("/api/v1/login1",authMiddleware,async (req : any, res : any)=>{
 
     try{
-        return AuthController.login(req,res);
+        return res.status(200).json({
+            msg:"done"
+        })
     }catch(err :any){
         return res.status(500).json({
             error: err.message
