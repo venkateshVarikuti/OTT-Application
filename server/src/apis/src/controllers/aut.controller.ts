@@ -29,34 +29,35 @@ class AuthController{
 
     async login(req:any , res:any){
         
-        User.findOne({email : req.body.email}).then((user: any)=>{
-    
-            if(!user){
-                return res.status(401).json({
-                    msg: "Email not found"
-                });
-            }
-            if(user.role=='distributor' && user.isAccepted==false){
-                return res.status(401).json({
-                    msg: "distributor is not accepted"
-                });
-            }
-            if(compareSync(req.body.password, user.password)==false){
-                return res.status(401).json({
-                    msg: "Password Incorrect"
-                });
-            }
-            
-            const payload={
-                username: user.username,
-                email : user.email
-            };
-            var token = jwt.sign(payload, 'weljmwieuilsdcpoavqwebcskdiutregbc'
-                ,{expiresIn: "3d"});
-            return res.status(200).json({
-                token :  token
+
+        const user= await User.findOne({email : req.body.email});
+
+        if(!user){
+            return res.status(401).json({
+                msg: "Email not found"
             });
+        }
+        if(user.role=='distributor' && user.isAccepted==false){
+            return res.status(401).json({
+                msg: "distributor is not accepted"
+            });
+        }
+        if(compareSync(req.body.password, user.password)==false){
+            return res.status(401).json({
+                msg: "Password Incorrect"
+            });
+        }
+        
+        const payload={
+            username: user.username,
+            email : user.email
+        };
+        var token = jwt.sign(payload, 'weljmwieuilsdcpoavqwebcskdiutregbc'
+            ,{expiresIn: "3d"});
+        return res.status(200).json({
+            token :  token
         });
+        
     }
 
     async sendOTP(req: any, res: any){
