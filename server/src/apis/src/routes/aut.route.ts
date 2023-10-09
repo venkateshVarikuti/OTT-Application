@@ -9,7 +9,8 @@ const router= express.Router();
 router.post("/api/v1/register",async (req : express.Request,res : express.Response)=>{
 
     try{
-        return AuthController.register(req,res);
+        const user=AuthController.register(req,res);
+        return res.status(200).json({})
     }catch(err :any){
         return res.status(500).json({
             error: err.message

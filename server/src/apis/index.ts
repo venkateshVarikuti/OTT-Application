@@ -1,8 +1,9 @@
-import express from "express";
-import passport from "passport";
-import dotenv from "dotenv";
+const express = require("express");
+const passport = require("passport");
+const  dotenv = require("dotenv") ;
 import { AuthRouter } from "./src/routes/aut.route";
-import { db } from '../database/connection';
+import mongoose, { ConnectOptions } from "mongoose";
+
 const path = require("path");
 const cors= require('cors');
 dotenv.config({ path: path.join(__dirname, "../../../.env") });
@@ -12,7 +13,7 @@ const init = async () => {
     app.use(cors());
     app.use(express.json());
     app.use(passport.initialize());
-
+    app.use(express.urlencoded({ extended: true }));
     app.use(
         AuthRouter
     )
@@ -31,11 +32,18 @@ const init = async () => {
   };
 
 
-db.connect()
-  .then(() => {
-    console.log("db connected");
+const DB:any =process.env.DATABASE?.replace(
+  '<password>', process.env.DATABASE_PASSWORD as any
+);
+console.log(DB)
+
+mongoose
+  .connect(DB, {
+    useNewUrlParser: true,
+    //useCreateIndex: true,
+   // useFindAndModify: false
+  } as ConnectOptions)
+  .then(() =>{
     init();
-  })
-  .catch((err: Object) => {
-    console.log("Error connecting database: ", err);
-  });
+    console.log('DB connection successful!');
+  } );
