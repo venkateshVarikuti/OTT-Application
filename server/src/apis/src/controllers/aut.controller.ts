@@ -1,7 +1,8 @@
 
 import { generateSecret, generateOTPCode } from "../common/otp";
 import nodemailer from "nodemailer";
-
+import User from "../../../database/models/user"
+import speakeasy from "speakeasy";
 const { compareSync, hashSync  } = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -11,25 +12,33 @@ class AuthController{
 
     async register(req: any, res:any){
         const encrypted_password= hashSync(req.body.password,10);
-        const user ={
-            firstName: req.body.firstName,
-            secondName: req.body.secondName,
-            email : req.body.email,
-            password : encrypted_password,
-            phoneNumber: req.body.phoneNumber,
-            DOB: req.body.DOB,
-            gender: req.body.gender,
-        }
+        const user=User.create(
+            {
+                username : req.body.username,
+                email : req.body.email,
+                password : encrypted_password,
+                phoneNumber: req.body.phoneNumber,
+                DOB: req.body.DOB,
+                gender: req.body.gender,
+                role: req.body.role,
+                isAccepted: req.body.role =='user' || req.body.role =='superAdmin' ? true: false
+            }
+        );
+        return user;
     }
 
     async login(req:any , res:any){
-        const user:any= {
-        };
-        user.findOne({email : req.body.email}).then((user: any)=>{
+        
+        User.findOne({email : req.body.email}).then((user: any)=>{
     
             if(!user){
                 return res.status(401).json({
                     msg: "Email not found"
+                });
+            }
+            if(user.role=='distributor' && user.isAccepted==false){
+                return res.status(401).json({
+                    msg: "distributor is not accepted"
                 });
             }
             if(compareSync(req.body.password, user.password)==false){
@@ -37,12 +46,14 @@ class AuthController{
                     msg: "Password Incorrect"
                 });
             }
+            
             const payload={
+                username: user.username,
                 email : user.email
             };
-            var token = jwt.sign(payload, process.env.JWT_SECRET_KEY);
+            var token = jwt.sign(payload, process.env.JWT_SECRET_KEY,"3d");
             return res.status(200).json({
-                token : "Bearer " + token
+                token :  token
             });
         });
     }
@@ -79,11 +90,31 @@ class AuthController{
                 })
             }
         });
-
     }
 
+    async verifyOTP(req: any,res: any){
 
+        try{
+            const { secret, otp, email } = req.body;
+        // Verify the OTP code with (secret + token + step + encoding)
+        const verified = speakeasy.totp.verify({
+            secret,
+            encoding: 'base32',
+            token: otp,
+            step: 600 // OTP is valid for 600 seconds
+        });
+
+        if (verified) {
+            // Update the emailVerified field
+            return res.status(200).json({ message: 'OTP is valid' });
+        } else {
+            res.status(400).json({ message: 'Invalid OTP' });
+        }
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Failed to verify OTP' });
+        }
+    }
 }
-
 export default new AuthController();
 
