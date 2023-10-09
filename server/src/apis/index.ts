@@ -5,6 +5,7 @@ import { AuthRouter } from "./src/routes/aut.route";
 import mongoose, { ConnectOptions } from "mongoose";
 const session = require("express-session")
 import { VideoRouter } from "./src/routes/video.route";
+import {  SuperAdminRouter } from "./src/routes/superAdmin";
 
 const path = require("path");
 const cors= require('cors');
@@ -25,7 +26,8 @@ const init = async () => {
     app.use(express.urlencoded({ extended: true }));
     app.use(
         AuthRouter,
-        VideoRouter
+        VideoRouter,
+        SuperAdminRouter
     )
     app.use(sessionMiddleware);
 

@@ -41,7 +41,7 @@ const userSchema = new mongoose.Schema({
   },
   isAccepted:{
     type: Boolean,
-    default: true
+    default: false
   }
   ,
   passwordChangedAt: Date,
@@ -51,6 +51,10 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
     select: false
+  },
+  isRejected :{
+    type: Boolean,
+    default: false
   }
 });
 

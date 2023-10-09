@@ -30,19 +30,6 @@ router.post("/api/v1/login",async (req : any, res : any)=>{
     }
 });
 
-router.post("/api/v1/login1",authMiddleware,async (req : any, res : any)=>{
-
-    try{
-        return res.status(200).json({
-            msg:"done"
-        })
-    }catch(err :any){
-        return res.status(500).json({
-            error: err.message
-        })
-    }
-});
-
 router.get("/api/v1/sendOTP",async (req:any , res: any)=>{
 
     try{
