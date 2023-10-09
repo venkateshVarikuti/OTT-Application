@@ -51,7 +51,8 @@ class AuthController{
                 username: user.username,
                 email : user.email
             };
-            var token = jwt.sign(payload, process.env.JWT_SECRET_KEY,"3d");
+            var token = jwt.sign(payload, 'weljmwieuilsdcpoavqwebcskdiutregbc'
+                ,{expiresIn: "3d"});
             return res.status(200).json({
                 token :  token
             });

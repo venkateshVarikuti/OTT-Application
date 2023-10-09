@@ -3,10 +3,16 @@ const passport = require("passport");
 const  dotenv = require("dotenv") ;
 import { AuthRouter } from "./src/routes/aut.route";
 import mongoose, { ConnectOptions } from "mongoose";
+const session = require("express-session")
 
 const path = require("path");
 const cors= require('cors');
 dotenv.config({ path: path.join(__dirname, "../../../.env") });
+const sessionMiddleware = session({
+  secret: process.env.JWT_SECRET_KEY,
+  resave: false,
+  saveUninitialized: false
+});
 
 const init = async () => {
     const app= express();
@@ -17,6 +23,7 @@ const init = async () => {
     app.use(
         AuthRouter
     )
+    app.use(sessionMiddleware);
 
     app.get("/", (req : any,res:any )=>{
         res.status(200).json({
@@ -24,17 +31,15 @@ const init = async () => {
         });
     });
 
-    app.listen(process.env.PORT, async ()=>{
-        console.log("Server is running on ",process.env.PORT);
+    app.listen(process.env.PORT|| 4000, async ()=>{
+        console.log("Server is running on ",process.env.PORT|| 4000);
     })
         
   
   };
 
 
-const DB:any =process.env.DATABASE?.replace(
-  '<password>', process.env.DATABASE_PASSWORD as any
-);
+const DB:any =`mongodb+srv://prakash110cse:FvzFEkCHFZNaHLmL@8gott.x6tims4.mongodb.net/?retryWrites=true&w=majority`
 console.log(DB)
 
 mongoose

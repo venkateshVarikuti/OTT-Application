@@ -1,6 +1,7 @@
 import express from "express";
 import passport from "passport";
 import AuthController from "../controllers/aut.controller";
+import authMiddleware from "../common/middlewares/authentication";
 var jwt = require('jsonwebtoken');
 const router= express.Router();
 
@@ -19,6 +20,17 @@ router.post("/api/v1/register",async (req : express.Request,res : express.Respon
 });
 
 router.post("/api/v1/login",async (req : any, res : any)=>{
+
+    try{
+        return AuthController.login(req,res);
+    }catch(err :any){
+        return res.status(500).json({
+            error: err.message
+        })
+    }
+});
+
+router.post("/api/v1/login1",authMiddleware,async (req : any, res : any)=>{
 
     try{
         return AuthController.login(req,res);
